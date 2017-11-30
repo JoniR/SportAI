@@ -1,7 +1,7 @@
 # SportAI - Chatbot based on Dialogflow 
 SportAI. Small demo of using HTML5 Speech API and Dialogflow for parsing sport results from user sentence.
 
-##Artificial Intelligence is here for everyone
+## Artificial Intelligence is here for everyone
 Lately I have been research quite of machine learning, artificial intelligence around natural language processing. One day I told to my colleagues that I bought Google Home Mini and that I am going to integrate it to my home automation platform. This started interesting discussing, ”what you are going to do with it?, why do you need it? etc”. Then we discussed about speech recognition and where that could be used.
 
 ## Finding real life use case for speech recognition
