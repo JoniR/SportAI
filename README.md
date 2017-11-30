@@ -10,7 +10,7 @@ One of the colleague is working as a volunteer official on track and field event
 ## From idea to mock up - SportAI
 I did some fast exploring from internet and found some good examples and documents how his idea could be achieved. Like everyone today, I copy & paste some lines of code, put them together during few nights and BAM! Here is the mockup of SportAI where user can write or spell results for each competitor.
 
-[Why not try by yourself and give a shout?](./SportAI.png)
+![Why not try by yourself and give a shout?](./SportAI.png)
 
 Why not try by yourself and give a shout? You need to enable and give permission to microphone and most probably this works only with modern browser like Google Chrome.
 You can find demo from here: https://sportsai.glitch.me/
