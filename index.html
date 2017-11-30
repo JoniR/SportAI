@@ -12,24 +12,13 @@
     <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css"
         media="screen,projection" />
 
+    <!--Custom styles-->
+    <link href="styles.css" rel="stylesheet">
+
     <!--Let browser know website is optimized for mobile-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SportAI</title>
 </head>
-<style type="text/css">
-    .container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-    }
-    .footer {
-        position: fixed;
-        top: 90%;
-        left: 50%;
-        -webkit-transform: translate(-50%, -50%);
-    }
-</style>
 
 <body>
     <div class="container">
@@ -58,160 +47,16 @@
     </div>
     <div class="footer">
         <div class="row">
-                <a href="url"><i class="fa fa-github fa-3x" style="color:teal" aria-hidden="true"></i></a>
-                <a href="url"><i class="fa fa-linkedin fa-3x" style="color:teal" aria-hidden="true"></i></a>
+                <a href="https://github.com/JoniR/SportAI"><i class="fa fa-github fa-3x" style="color:teal" aria-hidden="true"></i></a>
+                <a href="https://www.linkedin.com/in/rasanenj/"><i class="fa fa-linkedin fa-3x" style="color:teal" aria-hidden="true"></i></a>
         </div>
     </div>
 
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
-
-    <script type="text/javascript">
-        var accessToken = process.env.token,
-            baseUrl = "https://api.api.ai/v1/",
-            $speechInput,
-            $textInput,
-            $recBtn,
-            recognition,
-            messageRecording = "Listening...",
-            messageCouldntHear = "I couldn't hear you, could you say that again?",
-            messageInternalError = "Oh no, there has been an internal server error",
-            messageSorry = "I'm sorry, I don't have the answer to that yet.";
-
-        $(document).ready(function () {
-            $speechInput = $("#speech");
-            $recBtn = $("#rec");
-
-            $speechInput.keypress(function (event) {
-                if (event.which == 13) {
-                    event.preventDefault();
-                    send();
-                }
-            });
-            $recBtn.on("click", function (event) {
-                switchRecognition();
-            });
-        });
-
-        function startRecognition() {
-            recognition = new webkitSpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-
-            recognition.onstart = function (event) {
-                respond(messageRecording);
-                updateRec();
-            };
-            recognition.onresult = function (event) {
-                recognition.onend = null;
-
-                var text = "";
-                for (var i = event.resultIndex; i < event.results.length; ++i) {
-                    text += event.results[i][0].transcript;
-                }
-                setInput(text);
-                stopRecognition();
-            };
-            recognition.onend = function () {
-                respond(messageCouldntHear);
-                stopRecognition();
-            };
-            recognition.lang = "en-US";
-            recognition.start();
-        }
-
-        function stopRecognition() {
-            if (recognition) {
-                recognition.stop();
-                recognition = null;
-            }
-            updateRec();
-        }
-
-        function switchRecognition() {
-            if (recognition) {
-                stopRecognition();
-            } else {
-                startRecognition();
-            }
-        }
-
-        function setInput(text) {
-            $textInput = text;
-            send();
-        }
-
-        function updateRec() {
-            if (recognition) {
-                $("#rec").addClass("pulse").find(".rec_btn").html();
-            } else { $("#rec").removeClass("pulse").find(".rec_btn").html(); }
-        }
-
-        function send() {
-            var text = $speechInput.val();
-            if (text.length < 1) { text = $textInput; }
-
-            $("#spokenInput").addClass("is-active").find(".spoken-input__text").html("You: " + text);
-
-            $("#spokenInput").removeClass("hide").find(".spoken-input__text").html();
-
-            $.ajax({
-                type: "POST",
-                url: baseUrl + "query",
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                headers: {
-                    "Authorization": "Bearer " + accessToken
-                },
-                data: JSON.stringify({ query: text, lang: "en", sessionId: "yaydevdiner" }),
-
-                success: function (data) {
-                    prepareResponse(data);
-                },
-                error: function () {
-                    respond(messageInternalError);
-                }
-            });
-        }
-
-        function prepareResponse(val) {
-            var debugJSON = JSON.stringify(val, undefined, 2),
-                spokenResponse = val.result.speech,
-                parameters = JSON.stringify(val.result.parameters, undefined, 2);
-
-            if (val.result.speech == "Thank you. Result is booked") {
-                spokenResponse = "Result " + val.result.parameters.result.amount + " was booked to competitor " + val.result.parameters.competitor
-            } else { spokenResponse = val.result.speech; }
-
-            respond(spokenResponse);
-            debugRespond(debugJSON);
-        }
-
-        function debugRespond(val) {
-            console.log(val);
-            $("#response").text(val);
-
-        }
-
-        function respond(val) {
-            if (val == "") {
-                val = messageSorry;
-            }
-
-            if (val !== messageRecording) {
-                var voices = window.speechSynthesis.getVoices();
-                var msg = new SpeechSynthesisUtterance();
-                msg.voiceURI = "native";
-                msg.text = val;
-                msg.lang = "en-US";
-                window.speechSynthesis.speak(msg);
-            }
-
-            $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html("SportAI: " + val);
-            $speechInput.val("")
-        }
-    </script>
+    <!--Import custom javascript-->
+    <script type="text/javascript" src="script.js"></script>
 </body>
 
 </html>
